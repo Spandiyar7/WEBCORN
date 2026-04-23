@@ -62,19 +62,52 @@ const initRevealAnimations = () => {
   });
 };
 
-const EARTH_ASSETS = {
-  diffuse: "assets/space/earth-blue-marble-4096.jpg",
-  lights: "assets/space/earth-city-lights-4096.jpg",
-  clouds: "assets/space/earth-clouds-1024.png",
-  specular: "assets/space/earth-specular-2048.jpg",
-  normal: "assets/space/earth-normal-2048.jpg",
-  moon: "assets/space/moon-1024.jpg",
+const THREE_MODULE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+const COLLADA_LOADER_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/ColladaLoader.js";
+
+const SATURN_ASSETS = {
+  model: "saturn/uploads-files-4052472-Stylized+Planets.dae",
+  textureRoot: "saturn/Textures/Saturn 4K/",
+  saturnBase: "saturn/Textures/Saturn 4K/Saturn2_Saturn_BaseColor.png",
+  saturnNormal: "saturn/Textures/Saturn 4K/Saturn2_Saturn_Normal.png",
+  saturnRoughness: "saturn/Textures/Saturn 4K/Saturn2_Saturn_Roughness.png",
+  saturnMetallic: "saturn/Textures/Saturn 4K/Saturn2_Saturn_Metallic.png",
+  ringsBase: "saturn/Textures/Saturn 4K/Saturn2_Rings_BaseColor.png",
+  ringsNormal: "saturn/Textures/Saturn 4K/Saturn2_Rings_Normal.png",
+  ringsRoughness: "saturn/Textures/Saturn 4K/Saturn2_Rings_Roughness.png",
+  ringsMetallic: "saturn/Textures/Saturn 4K/Saturn2_Rings_Metallic.png",
+  moonBase: "saturn/Textures/Moon 4K/Saturn2_Saturn_BaseColor.png",
 };
 
-const initSpaceScene = () => {
+const resolveThreeRuntime = async () => {
+  try {
+    const [threeModule, colladaModule] = await Promise.all([
+      import(THREE_MODULE_URL),
+      import(COLLADA_LOADER_URL),
+    ]);
+
+    return {
+      THREE: threeModule,
+      ColladaLoader: colladaModule.ColladaLoader,
+    };
+  } catch (error) {
+    return {
+      THREE: window.THREE,
+      ColladaLoader: null,
+    };
+  }
+};
+
+const initSpaceScene = async () => {
   const canvas = document.getElementById("space-canvas");
 
-  if (!canvas || !window.THREE || prefersReducedMotion) {
+  if (!canvas || prefersReducedMotion) {
+    return;
+  }
+
+  const { THREE, ColladaLoader } = await resolveThreeRuntime();
+
+  if (!THREE) {
     return;
   }
 
@@ -87,6 +120,7 @@ const initSpaceScene = () => {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
   const group = new THREE.Group();
+  const saturnGroup = new THREE.Group();
 
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -97,8 +131,11 @@ const initSpaceScene = () => {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.18;
   }
+  scene.background = new THREE.Color(0x020713);
+  scene.fog = new THREE.FogExp2(0x020713, 0.026);
   scene.add(group);
-  camera.position.set(0, 0.4, 11.5);
+  camera.position.set(0.18, 0.2, 8.9);
+  group.add(saturnGroup);
 
   const textureLoader = new THREE.TextureLoader();
   const maxAnisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
@@ -117,6 +154,48 @@ const initSpaceScene = () => {
     }
 
     return texture;
+  };
+
+  const textures = {
+    saturnBase: loadTexture(SATURN_ASSETS.saturnBase, true),
+    saturnNormal: loadTexture(SATURN_ASSETS.saturnNormal),
+    saturnRoughness: loadTexture(SATURN_ASSETS.saturnRoughness),
+    saturnMetallic: loadTexture(SATURN_ASSETS.saturnMetallic),
+    ringsBase: loadTexture(SATURN_ASSETS.ringsBase, true),
+    ringsNormal: loadTexture(SATURN_ASSETS.ringsNormal),
+    ringsRoughness: loadTexture(SATURN_ASSETS.ringsRoughness),
+    ringsMetallic: loadTexture(SATURN_ASSETS.ringsMetallic),
+    moonBase: loadTexture(SATURN_ASSETS.moonBase, true),
+  };
+
+  const materials = {
+    saturn: new THREE.MeshStandardMaterial({
+      map: textures.saturnBase,
+      normalMap: textures.saturnNormal,
+      roughnessMap: textures.saturnRoughness,
+      metalnessMap: textures.saturnMetallic,
+      roughness: 0.86,
+      metalness: 0.02,
+      color: 0xffffff,
+    }),
+    rings: new THREE.MeshStandardMaterial({
+      map: textures.ringsBase,
+      normalMap: textures.ringsNormal,
+      roughnessMap: textures.ringsRoughness,
+      metalnessMap: textures.ringsMetallic,
+      roughness: 0.78,
+      metalness: 0.02,
+      transparent: true,
+      alphaTest: 0.035,
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+    }),
+    moon: new THREE.MeshStandardMaterial({
+      map: textures.moonBase,
+      roughness: 0.92,
+      metalness: 0,
+      color: 0xf2f5ff,
+    }),
   };
 
   const createStarField = (count, baseRadius, depthOffset, verticalSpread) => {
@@ -138,7 +217,7 @@ const initSpaceScene = () => {
   };
 
   const deepStars = new THREE.Points(
-    createStarField(1150, 8.4, -12, 0.34),
+    createStarField(1450, 9.2, -12, 0.34),
     new THREE.PointsMaterial({
       color: 0xdaf6ff,
       size: 0.014,
@@ -149,7 +228,7 @@ const initSpaceScene = () => {
   group.add(deepStars);
 
   const starGeometry = new THREE.BufferGeometry();
-  const starCount = 680;
+  const starCount = 760;
   const starPositions = new Float32Array(starCount * 3);
 
   for (let i = 0; i < starCount; i += 1) {
@@ -174,188 +253,12 @@ const initSpaceScene = () => {
   );
   group.add(stars);
 
-  // NASA Blue Marble texture replaces the old generated cartoon map.
-  const earthTexture = loadTexture(EARTH_ASSETS.diffuse, true);
-  const cityLightsTexture = loadTexture(EARTH_ASSETS.lights, true);
-  const cloudTexture = loadTexture(EARTH_ASSETS.clouds, true);
-  const specularTexture = loadTexture(EARTH_ASSETS.specular);
-  const normalTexture = loadTexture(EARTH_ASSETS.normal);
-  const moonTexture = loadTexture(EARTH_ASSETS.moon, true);
-  const lightDirection = new THREE.Vector3(7.2, 3.4, 5.7).normalize();
-
-  const earth = new THREE.Mesh(
-    new THREE.SphereGeometry(2.2, 128, 128),
-    new THREE.MeshPhongMaterial({
-      map: earthTexture,
-      normalMap: normalTexture,
-      normalScale: new THREE.Vector2(0.46, 0.46),
-      specularMap: specularTexture,
-      color: 0xffffff,
-      emissive: new THREE.Color(0x143a66),
-      emissiveIntensity: 0.1,
-      specular: new THREE.Color(0x8ad6ff),
-      shininess: 34,
-    })
-  );
-  earth.position.set(2.5, -0.25, -5.8);
-  earth.rotation.set(-0.34, 0.7, -0.18);
-  group.add(earth);
-
-  const cityLights = new THREE.Mesh(
-    new THREE.SphereGeometry(2.207, 128, 128),
+  const glow = new THREE.Mesh(
+    new THREE.SphereGeometry(2.42, 96, 96),
     new THREE.ShaderMaterial({
       uniforms: {
-        lightsMap: { value: cityLightsTexture },
-        lightDirection: { value: lightDirection },
-        opacity: { value: 1.0 },
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        varying vec3 vWorldNormal;
-
-        void main() {
-          vUv = uv;
-          vWorldNormal = normalize(mat3(modelMatrix) * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform sampler2D lightsMap;
-        uniform vec3 lightDirection;
-        uniform float opacity;
-        varying vec2 vUv;
-        varying vec3 vWorldNormal;
-
-        void main() {
-          vec3 lights = texture2D(lightsMap, vUv).rgb;
-          float lightStrength = max(max(lights.r, lights.g), lights.b);
-          float nightSide = 1.0 - smoothstep(-0.16, 0.2, dot(normalize(vWorldNormal), normalize(lightDirection)));
-          float cityMask = smoothstep(0.08, 0.82, lightStrength) * nightSide * opacity;
-          vec3 cityColor = mix(vec3(1.0, 0.56, 0.2), vec3(0.65, 0.86, 1.0), smoothstep(0.58, 1.0, lightStrength));
-
-          gl_FragColor = vec4(cityColor * lightStrength * 2.35, cityMask);
-        }
-      `,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    })
-  );
-  cityLights.position.copy(earth.position);
-  cityLights.rotation.copy(earth.rotation);
-  group.add(cityLights);
-
-  const clouds = new THREE.Mesh(
-    new THREE.SphereGeometry(2.225, 128, 128),
-    new THREE.MeshLambertMaterial({
-      map: cloudTexture,
-      alphaMap: cloudTexture,
-      transparent: true,
-      opacity: 0.44,
-      depthWrite: false,
-    })
-  );
-  clouds.position.copy(earth.position);
-  clouds.rotation.copy(earth.rotation);
-  group.add(clouds);
-
-  const hazeMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      glowColor: { value: new THREE.Color(0x72dcff) },
-      lightDirection: { value: lightDirection },
-      opacity: { value: 0.52 },
-    },
-    vertexShader: `
-      varying vec3 vNormal;
-      varying vec3 vViewPosition;
-      varying vec3 vWorldNormal;
-
-      void main() {
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        vNormal = normalize(normalMatrix * normal);
-        vViewPosition = -mvPosition.xyz;
-        vWorldNormal = normalize(mat3(modelMatrix) * normal);
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      uniform vec3 glowColor;
-      uniform vec3 lightDirection;
-      uniform float opacity;
-      varying vec3 vNormal;
-      varying vec3 vViewPosition;
-      varying vec3 vWorldNormal;
-
-      void main() {
-        float viewRim = 1.0 - max(dot(normalize(vNormal), normalize(vViewPosition)), 0.0);
-        float sunSide = smoothstep(-0.18, 0.82, dot(normalize(vWorldNormal), normalize(lightDirection)));
-        float horizon = pow(viewRim, 2.1) * 0.74;
-        float dayHaze = pow(sunSide, 4.0) * 0.08;
-        float alpha = (horizon + dayHaze) * opacity;
-
-        gl_FragColor = vec4(glowColor, alpha);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-  });
-
-  const atmosphereHaze = new THREE.Mesh(
-    new THREE.SphereGeometry(2.34, 128, 128),
-    hazeMaterial
-  );
-  atmosphereHaze.position.copy(earth.position);
-  atmosphereHaze.rotation.copy(earth.rotation);
-  group.add(atmosphereHaze);
-
-  const rimAtmosphereMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      glowColor: { value: new THREE.Color(0x69d9ff) },
-      intensity: { value: 1.0 },
-    },
-    vertexShader: `
-      varying vec3 vNormal;
-      varying vec3 vViewPosition;
-
-      void main() {
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        vNormal = normalize(normalMatrix * normal);
-        vViewPosition = -mvPosition.xyz;
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      uniform vec3 glowColor;
-      uniform float intensity;
-      varying vec3 vNormal;
-      varying vec3 vViewPosition;
-
-      void main() {
-        float rim = 1.0 - max(dot(normalize(vNormal), normalize(vViewPosition)), 0.0);
-        float glow = pow(rim, 2.35) * intensity;
-        gl_FragColor = vec4(glowColor, glow);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    side: THREE.BackSide,
-    blending: THREE.AdditiveBlending,
-  });
-
-  const atmosphere = new THREE.Mesh(
-    new THREE.SphereGeometry(2.42, 128, 128),
-    rimAtmosphereMaterial
-  );
-  atmosphere.position.copy(earth.position);
-  atmosphere.rotation.copy(earth.rotation);
-  group.add(atmosphere);
-
-  const surfaceGlow = new THREE.Mesh(
-    new THREE.SphereGeometry(2.55, 128, 128),
-    new THREE.ShaderMaterial({
-      uniforms: {
-        glowColor: { value: new THREE.Color(0x7f8cff) },
+        glowColor: { value: new THREE.Color(0x80caff) },
+        intensity: { value: 0.45 },
       },
       vertexShader: `
         varying vec3 vNormal;
@@ -370,12 +273,13 @@ const initSpaceScene = () => {
       `,
       fragmentShader: `
         uniform vec3 glowColor;
+        uniform float intensity;
         varying vec3 vNormal;
         varying vec3 vViewPosition;
 
         void main() {
           float rim = 1.0 - max(dot(normalize(vNormal), normalize(vViewPosition)), 0.0);
-          float glow = pow(rim, 3.4) * 0.55;
+          float glow = pow(rim, 2.6) * intensity;
           gl_FragColor = vec4(glowColor, glow);
         }
       `,
@@ -385,118 +289,163 @@ const initSpaceScene = () => {
       blending: THREE.AdditiveBlending,
     })
   );
-  surfaceGlow.position.copy(earth.position);
-  surfaceGlow.rotation.copy(earth.rotation);
-  group.add(surfaceGlow);
+  glow.position.set(2.08, -0.08, -5.4);
+  group.add(glow);
 
-  const moon = new THREE.Mesh(
-    new THREE.SphereGeometry(0.55, 64, 64),
-    new THREE.MeshPhongMaterial({
-      map: moonTexture,
-      color: 0xf4f6ff,
-      emissive: new THREE.Color(0x111827),
-      emissiveIntensity: 0.08,
-      shininess: 5,
-    })
-  );
-  moon.position.set(-4.8, 2.15, -7.4);
-  moon.rotation.set(0.18, -0.65, 0.08);
-  group.add(moon);
+  const chooseMaterial = (sourceName = "") => {
+    const name = sourceName.toLowerCase();
 
-  const moonGlow = new THREE.Mesh(
-    new THREE.SphereGeometry(0.74, 48, 48),
-    new THREE.ShaderMaterial({
-      uniforms: {
-        glowColor: { value: new THREE.Color(0xaedfff) },
-      },
-      vertexShader: `
-        varying vec3 vNormal;
-        varying vec3 vViewPosition;
+    if (name.includes("ring")) {
+      return materials.rings;
+    }
 
-        void main() {
-          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          vNormal = normalize(normalMatrix * normal);
-          vViewPosition = -mvPosition.xyz;
-          gl_Position = projectionMatrix * mvPosition;
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 glowColor;
-        varying vec3 vNormal;
-        varying vec3 vViewPosition;
+    if (name.includes("moon")) {
+      return materials.moon;
+    }
 
-        void main() {
-          float rim = 1.0 - max(dot(normalize(vNormal), normalize(vViewPosition)), 0.0);
-          float glow = pow(rim, 2.8) * 0.34;
-          gl_FragColor = vec4(glowColor, glow);
-        }
-      `,
-      transparent: true,
-      depthWrite: false,
-      side: THREE.BackSide,
-      blending: THREE.AdditiveBlending,
-    })
-  );
-  moonGlow.position.copy(moon.position);
-  group.add(moonGlow);
+    return materials.saturn;
+  };
+
+  const prepareSaturnModel = (model) => {
+    const embeddedLights = [];
+
+    model.traverse((object) => {
+      if (object.isLight) {
+        embeddedLights.push(object);
+        return;
+      }
+
+      if (!object.isMesh) {
+        return;
+      }
+
+      if (object.geometry && !object.geometry.attributes.normal) {
+        object.geometry.computeVertexNormals();
+      }
+
+      if (Array.isArray(object.material)) {
+        object.material = object.material.map((material) => chooseMaterial(material?.name || object.name));
+      } else {
+        object.material = chooseMaterial(object.material?.name || object.name);
+      }
+    });
+
+    embeddedLights.forEach((light) => light.parent?.remove(light));
+    model.updateMatrixWorld(true);
+
+    const box = new THREE.Box3().setFromObject(model);
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    const maxSize = Math.max(size.x, size.y, size.z) || 1;
+
+    model.position.sub(center);
+    model.scale.multiplyScalar(4.8 / maxSize);
+    model.rotation.set(-0.14, -0.34, -0.18);
+
+    return model;
+  };
+
+  const createFallbackSaturn = () => {
+    const fallback = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.SphereGeometry(1.28, 128, 128), materials.saturn);
+    const rings = new THREE.Mesh(new THREE.RingGeometry(1.78, 3.24, 192, 3), materials.rings);
+
+    rings.rotation.x = Math.PI * 0.5;
+    fallback.add(body, rings);
+    fallback.rotation.set(-0.14, -0.34, -0.18);
+
+    return fallback;
+  };
+
+  const loadSaturnModel = () =>
+    new Promise((resolve) => {
+      if (!ColladaLoader) {
+        resolve(createFallbackSaturn());
+        return;
+      }
+
+      const loader = new ColladaLoader();
+      loader.setResourcePath(SATURN_ASSETS.textureRoot);
+      loader.load(
+        SATURN_ASSETS.model,
+        (collada) => resolve(prepareSaturnModel(collada.scene)),
+        undefined,
+        () => resolve(createFallbackSaturn())
+      );
+    });
+
+  const saturnModel = await loadSaturnModel();
+  saturnGroup.add(saturnModel);
+  saturnGroup.position.set(2.12, -0.12, -5.55);
+  saturnGroup.scale.setScalar(1.06);
 
   scene.add(new THREE.AmbientLight(0xcfeaff, 0.5));
-  const keyLight = new THREE.DirectionalLight(0xffffff, 3.65);
-  keyLight.position.set(7.2, 3.4, 5.7);
+  const keyLight = new THREE.DirectionalLight(0xffffff, 3.2);
+  keyLight.position.set(5.8, 3.2, 4.8);
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight(0x8fcfff, 0.72);
-  fillLight.position.set(-2.8, 1.4, 4.5);
+  const fillLight = new THREE.DirectionalLight(0x84cfff, 0.8);
+  fillLight.position.set(-3.2, 1.8, 3.4);
   scene.add(fillLight);
-  const rimLight = new THREE.DirectionalLight(0x65d8ff, 1.7);
+  const rimLight = new THREE.DirectionalLight(0x65d8ff, 1.25);
   rimLight.position.set(-4, 1.6, -2);
   scene.add(rimLight);
 
-  let scrollProgress = 0;
+  const motion = { progress: 0 };
   let renderedProgress = 0;
   let frameId;
 
-  const updateScroll = () => {
+  const readScrollProgress = () => {
     const journey = document.querySelector(".journey");
     const max = Math.max((journey?.offsetHeight || window.innerHeight) - window.innerHeight, 1);
     const top = journey?.offsetTop || 0;
-    scrollProgress = Math.min(Math.max((window.scrollY - top) / max, 0), 1);
+    return Math.min(Math.max((window.scrollY - top) / max, 0), 1);
   };
 
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(motion, {
+      progress: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".journey",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1.6,
+      },
+    });
+  } else {
+    const updateScroll = () => {
+      motion.progress = readScrollProgress();
+    };
+
+    window.addEventListener("scroll", updateScroll, { passive: true });
+    updateScroll();
+  }
+
   const render = () => {
-    renderedProgress += (scrollProgress - renderedProgress) * 0.055;
+    renderedProgress += (motion.progress - renderedProgress) * 0.04;
     const eased = renderedProgress * renderedProgress * (3 - 2 * renderedProgress);
-    const cameraZoom = 11.8 - eased * 4.45;
 
-    camera.position.z = cameraZoom;
-    camera.position.x = eased * 0.72;
-    camera.position.y = 0.42 - eased * 0.32;
+    camera.position.x = 0.18 + eased * 0.38;
+    camera.position.y = 0.2 - eased * 0.12;
+    camera.position.z = 8.9 - eased * 0.74;
+    camera.lookAt(0.15 + eased * 0.36, -0.04, -5.4);
 
-    earth.scale.setScalar(1 + eased * 1.42);
-    cityLights.scale.setScalar(1 + eased * 1.435);
-    clouds.scale.setScalar(1 + eased * 1.46);
-    atmosphereHaze.scale.setScalar(1 + eased * 1.49);
-    atmosphere.scale.setScalar(1 + eased * 1.52);
-    surfaceGlow.scale.setScalar(1 + eased * 1.62);
-    moon.position.x = -4.8 + eased * 0.62;
-    moon.position.y = 2.15 - eased * 0.16;
-    moonGlow.position.copy(moon.position);
+    saturnGroup.rotation.y += 0.00105;
+    saturnGroup.rotation.x = -0.02 + eased * 0.035;
+    saturnGroup.rotation.z = -0.015 - eased * 0.025;
+    saturnGroup.position.x = 2.12 - eased * 0.28;
+    saturnGroup.position.y = -0.12 + eased * 0.08;
+    glow.position.x = saturnGroup.position.x;
+    glow.position.y = saturnGroup.position.y;
+    glow.material.uniforms.intensity.value = 0.36 + eased * 0.16;
 
-    earth.rotation.y += 0.0018;
-    cityLights.rotation.y = earth.rotation.y;
-    clouds.rotation.y += 0.00235;
-    atmosphereHaze.rotation.y = earth.rotation.y - 0.02;
-    atmosphere.rotation.y = earth.rotation.y - 0.04;
-    surfaceGlow.rotation.y = earth.rotation.y - 0.08;
-    moon.rotation.y += 0.00085;
     deepStars.rotation.y += 0.00012;
     stars.rotation.y += 0.00025;
-    group.rotation.x = -eased * 0.08;
+    group.rotation.x = -eased * 0.035;
 
-    atmosphereHaze.material.uniforms.opacity.value = 0.46 + eased * 0.18;
-    atmosphere.material.uniforms.intensity.value = 0.84 + eased * 0.34;
-    cityLights.material.uniforms.opacity.value = 0.74 + eased * 0.22;
     deepStars.material.opacity = 0.58 - eased * 0.12;
-    stars.material.opacity = 0.72 - eased * 0.28;
+    stars.material.opacity = 0.74 - eased * 0.18;
 
     renderer.render(scene, camera);
     frameId = window.requestAnimationFrame(render);
@@ -508,7 +457,6 @@ const initSpaceScene = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
   };
 
-  window.addEventListener("scroll", updateScroll, { passive: true });
   window.addEventListener("resize", resize);
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
@@ -519,7 +467,6 @@ const initSpaceScene = () => {
     render();
   });
 
-  updateScroll();
   render();
 };
 

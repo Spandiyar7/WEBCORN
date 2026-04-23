@@ -158,6 +158,11 @@ public class Main {
                 return;
             }
 
+            if ("/api/public-leads/create".equals(path) && "POST".equals(method)) {
+                handleCreatePublicLead(exchange);
+                return;
+            }
+
             if ("/api/crm/leads".equals(path) && "GET".equals(method)) {
                 handleListLeads(exchange);
                 return;
@@ -303,6 +308,35 @@ public class Main {
         lead.projectDetails = mergeValue(lead.projectDetails, request.params().get("projectDetails"));
         lead.source = firstNonBlank(request.params().get("source"), lead.source, "Сайт webcorn");
         lead.lastUpdatedAt = timestamp;
+
+        saveLead(lead);
+
+        sendJson(exchange, 200, Map.of(
+                "success", true,
+                "lead", lead.toMap()
+        ));
+    }
+
+    private static void handleCreatePublicLead(HttpExchange exchange) throws IOException {
+        FormRequest request = readFormRequest(exchange);
+        Map<String, String> params = request.params();
+        String timestamp = now();
+        String contact = firstNonBlank(params.get("contact"), params.get("email"), params.get("phone"));
+
+        LeadRecord lead = LeadRecord.newLead();
+        lead.submittedAt = timestamp;
+        lead.lastUpdatedAt = timestamp;
+        lead.status = STATUS_NEW;
+        lead.fullName = requireValue(params, "fullName");
+        lead.businessName = valueOrBlank(params.get("businessName"));
+        lead.email = contact.contains("@") ? contact : valueOrBlank(params.get("email"));
+        lead.phone = contact.contains("@") ? valueOrBlank(params.get("phone")) : contact;
+        lead.country = valueOrBlank(params.get("country"));
+        lead.niche = firstNonBlank(params.get("niche"), "WEBCORN");
+        lead.packageTier = firstNonBlank(params.get("packageTier"), "3D сайт под ключ");
+        lead.selectedTemplate = firstNonBlank(params.get("selectedTemplate"), "WEBCORN landing");
+        lead.projectDetails = requireValue(params, "projectDetails");
+        lead.source = firstNonBlank(params.get("source"), "Главная WEBCORN");
 
         saveLead(lead);
 

@@ -283,9 +283,61 @@ const initJourneyMotion = () => {
   });
 };
 
+const initLeadForm = () => {
+  const form = document.querySelector("[data-lead-form]");
+  const status = document.querySelector("[data-form-status]");
+
+  if (!form || !status) {
+    return;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const submitButton = form.querySelector("button[type='submit']");
+    const formData = new FormData(form);
+    const contact = String(formData.get("contact") || "").trim();
+
+    if (contact.includes("@")) {
+      formData.set("email", contact);
+    } else {
+      formData.set("phone", contact);
+    }
+
+    status.hidden = false;
+    status.className = "form-status";
+    status.textContent = "Отправляем заявку...";
+    submitButton.disabled = true;
+
+    try {
+      const response = await fetch("/api/public-leads/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        },
+        body: new URLSearchParams(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("request failed");
+      }
+
+      form.reset();
+      status.classList.add("is-success");
+      status.textContent = "Заявка отправлена. Мы свяжемся с вами после изучения проекта.";
+    } catch (error) {
+      status.classList.add("is-error");
+      status.textContent = "Не удалось отправить заявку. Напишите нам напрямую: florencya08090@gmail.com";
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   initSmoothScroll();
   initRevealAnimations();
   initSpaceScene();
   initJourneyMotion();
+  initLeadForm();
 });

@@ -1723,6 +1723,54 @@
   Object.assign(TEXTS, {
     "Демо": entry("Demos"),
     "Смотреть примеры демо": entry("View demo examples"),
+    "Сайт должен продавать уровень бизнеса еще до первого контакта.": entry(
+      "A website should sell the level of the business before the first contact."
+    ),
+    "webcorn показывает не мокапы, а реальные демо для отелей, клиник и ресторанов. Клиент сразу чувствует класс бренда, видит маршрут к заявке и понимает, почему вам можно доверять.": entry(
+      "webcorn shows not mockups, but real demos for hotels, clinics, and restaurants. The client immediately feels the class of the brand, sees the path to an inquiry, and understands why you can be trusted."
+    ),
+    "Открыть демо и выбрать нишу": entry("Open demos and choose a niche"),
+    "9 живых демо": entry("9 live demos"),
+    "Не картинки-заглушки, а реальные сценарии сайта.": entry(
+      "Not placeholder images, but real website scenarios."
+    ),
+    "Продажная структура": entry("Sales-focused structure"),
+    "Подача бренда, доверие и понятный переход к заявке.": entry(
+      "Brand presentation, trust, and a clear path to inquiry."
+    ),
+    "Адаптация под ваш бизнес": entry("Adapted to your business"),
+    "Контент, оффер и визуал под конкретную нишу и бренд.": entry(
+      "Content, offer, and visuals for a specific niche and brand."
+    ),
+    "webcorn system": entry("webcorn system"),
+    "Дорого выглядит. Быстро объясняет. Ведет к заявке.": entry(
+      "Looks premium. Explains fast. Leads to inquiry."
+    ),
+    "3 ниши / 9 живых демо / premium-подача вместо дешевого шаблона.": entry(
+      "3 niches / 9 live demos / premium presentation instead of a cheap template."
+    ),
+    "Демо → доверие → заявка": entry("Demo → trust → lead"),
+    "живых демо": entry("live demos"),
+    "первый экран с ощущением уровня": entry("a first screen that feels premium"),
+    "логика страницы под продажу, а не ради красоты": entry(
+      "a page logic made to sell, not just to look good"
+    ),
+    "Реальные демо": entry("Real demos"),
+    "Клиент сразу видит не обещание, а уровень исполнения.": entry(
+      "The client sees the level of execution immediately, not just a promise."
+    ),
+    "3D атмосфера": entry("3D atmosphere"),
+    "Первый экран создает ощущение дорогого digital-опыта.": entry(
+      "The first screen creates the feeling of an expensive digital experience."
+    ),
+    "Маршрут к заявке": entry("Path to inquiry"),
+    "Структура собирает доверие и мягко ведет дальше.": entry(
+      "The structure builds trust and smoothly moves the client forward."
+    ),
+    "Под ваш бренд": entry("For your brand"),
+    "Адаптируем контент, оффер и подачу под конкретный бизнес.": entry(
+      "We adapt content, offer, and presentation to a specific business."
+    ),
     "Премиальный сайт должен выглядеть как опыт, а не как шаблон.": entry(
       "A premium website should feel like an experience, not a template."
     ),

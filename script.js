@@ -407,14 +407,15 @@ const initHeader = () => {
 };
 
 const initProgress = () => {
-  if (!progressBar) {
-    return;
-  }
-
   const update = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const ratio = max > 0 ? window.scrollY / max : 0;
-    progressBar.style.width = `${Math.min(Math.max(ratio, 0), 1) * 100}%`;
+    const safeRatio = Math.min(Math.max(ratio, 0), 1);
+    document.documentElement.style.setProperty("--scroll-progress", String(safeRatio));
+
+    if (progressBar) {
+      progressBar.style.width = `${safeRatio * 100}%`;
+    }
   };
 
   update();

@@ -293,7 +293,7 @@ const initSpaceScene = async () => {
       blending: THREE.AdditiveBlending,
     })
   );
-  glow.position.set(2.7, -0.1, -5.25);
+  glow.position.set(0, -0.12, -5.35);
   group.add(glow);
 
   const chooseMaterial = (sourceName = "") => {
@@ -374,7 +374,7 @@ const initSpaceScene = async () => {
   const loadSaturnModel = () =>
     new Promise((resolve) => {
       if (!ColladaLoader) {
-        resolve(createFallbackSaturn());
+        resolve(null);
         return;
       }
 
@@ -384,16 +384,21 @@ const initSpaceScene = async () => {
         SATURN_ASSETS.model,
         (collada) => resolve(prepareSaturnModel(collada.scene)),
         undefined,
-        () => resolve(createFallbackSaturn())
+        () => resolve(null)
       );
     });
 
   const fallbackSaturn = createFallbackSaturn();
   saturnGroup.add(fallbackSaturn);
-  saturnGroup.position.set(2.7, -0.1, -5.25);
-  saturnGroup.scale.setScalar(1.2);
+  saturnGroup.position.set(0, -0.12, -5.35);
+  saturnGroup.scale.setScalar(1.18);
 
   loadSaturnModel().then((saturnModel) => {
+    if (!saturnModel) {
+      return;
+    }
+
+    saturnGroup.remove(fallbackSaturn);
     saturnModel.scale.multiplyScalar(1.18);
     saturnModel.position.set(0, 0, 0);
     saturnModel.traverse((object) => {
@@ -417,6 +422,9 @@ const initSpaceScene = async () => {
 
   const motion = { progress: 0 };
   let autoRotationY = 0;
+  let scrollRotationY = 0;
+  let scrollSpinVelocity = 0;
+  let lastScrollY = window.scrollY;
   let renderedProgress = 0;
   let frameId;
 
@@ -448,24 +456,48 @@ const initSpaceScene = async () => {
     updateScroll();
   }
 
+  const updateScrollSpin = () => {
+    const currentScrollY = window.scrollY;
+    const delta = currentScrollY - lastScrollY;
+    lastScrollY = currentScrollY;
+
+    if (delta === 0) {
+      return;
+    }
+
+    scrollSpinVelocity += Math.max(-80, Math.min(80, delta)) * 0.0018;
+  };
+
+  window.addEventListener("scroll", updateScrollSpin, { passive: true });
+
   const render = () => {
     renderedProgress += (motion.progress - renderedProgress) * 0.04;
     const eased = renderedProgress * renderedProgress * (3 - 2 * renderedProgress);
 
-    camera.position.x = 0.02 + eased * 0.18;
-    camera.position.y = 0.18 - eased * 0.06;
-    camera.position.z = 8.55 - eased * 0.95;
-    camera.lookAt(0.24 + eased * 0.16, -0.04, -5.05);
+    const narrowScreen = window.innerWidth < 760;
+    const baseScale = narrowScreen ? 0.9 : 1.18;
+    const scaleBoost = narrowScreen ? 0.24 : 0.42;
 
-    autoRotationY += 0.00072;
-    saturnGroup.rotation.y = autoRotationY + eased * Math.PI * 1.35;
-    saturnGroup.rotation.x = -0.02 + eased * 0.035;
-    saturnGroup.rotation.z = -0.015 - eased * 0.025;
-    saturnGroup.position.x = 2.7 - eased * 0.18;
-    saturnGroup.position.y = -0.1 + eased * 0.04;
-    saturnGroup.scale.setScalar(1.2 + eased * 0.12);
+    camera.position.x = 0;
+    camera.position.y = 0.16 - eased * 0.04;
+    camera.position.z = 8.65 - eased * 0.58;
+    camera.lookAt(0, -0.04, -5.3);
+
+    autoRotationY += 0.00078;
+    scrollRotationY += scrollSpinVelocity;
+    scrollSpinVelocity *= 0.9;
+
+    saturnGroup.rotation.y = autoRotationY + scrollRotationY;
+    saturnGroup.rotation.x = -0.02 + eased * 0.03;
+    saturnGroup.rotation.z = -0.015 - eased * 0.02;
+    saturnGroup.position.x = 0;
+    saturnGroup.position.y = (narrowScreen ? -0.28 : -0.12) + eased * 0.03;
+    saturnGroup.position.z = -5.35 + eased * 0.1;
+    saturnGroup.scale.setScalar(baseScale + eased * scaleBoost);
     glow.position.x = saturnGroup.position.x;
     glow.position.y = saturnGroup.position.y;
+    glow.position.z = saturnGroup.position.z;
+    glow.scale.setScalar(narrowScreen ? 0.74 : 0.96);
     glow.material.uniforms.intensity.value = 0.18 + eased * 0.08;
 
     deepStars.rotation.y += 0.00012;

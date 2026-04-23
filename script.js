@@ -1564,8 +1564,9 @@ const disposeMaterial = (material) => {
 const initHomeSpaceJourney = async () => {
   const canvas = document.getElementById("space-canvas");
   const isHomePage = document.body?.classList.contains("page-home");
+  const isMinimalHome = document.body?.classList.contains("page-home--minimal");
 
-  if (!canvas || !isHomePage) {
+  if (!canvas || !isHomePage || isMinimalHome) {
     return;
   }
 

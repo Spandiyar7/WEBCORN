@@ -5287,3 +5287,350 @@ body.landing-page.page-home {
     animation: none !important;
   }
 }
+
+.page-home--minimal #space-canvas {
+  display: none;
+}
+
+.page-home--minimal .page-backdrop {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(109, 138, 255, 0.1), transparent 0 24%),
+    linear-gradient(180deg, #050814 0%, #09111d 48%, #0b1220 100%);
+}
+
+.page-home--minimal .page-backdrop::before,
+.page-home--minimal .page-backdrop::after,
+.page-home--minimal .page-backdrop__glow {
+  opacity: 0.12;
+}
+
+.page-home--minimal .space-overlay {
+  background:
+    linear-gradient(180deg, rgba(2, 5, 12, 0.34) 0%, rgba(2, 5, 12, 0.1) 26%, rgba(2, 5, 12, 0.56) 100%),
+    radial-gradient(circle at center, rgba(5, 12, 24, 0.02) 0%, rgba(5, 12, 24, 0.3) 78%);
+}
+
+.page-home--minimal .page-noise {
+  opacity: 0.016;
+}
+
+.orbital-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orbital-bg__sphere,
+.orbital-bg__ring,
+.orbital-bg__glow {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.orbital-bg__sphere {
+  width: min(32vw, 360px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(246, 250, 255, 0.95), rgba(183, 222, 255, 0.42) 28%, rgba(93, 122, 255, 0.16) 54%, rgba(93, 122, 255, 0) 76%),
+    radial-gradient(circle at 62% 60%, rgba(86, 214, 255, 0.18), rgba(86, 214, 255, 0) 56%);
+  box-shadow:
+    0 0 140px rgba(122, 163, 255, 0.18),
+    inset 0 -40px 70px rgba(42, 74, 138, 0.24);
+  opacity: 0.76;
+  transform:
+    translate(-50%, calc(-50% + var(--scroll-progress) * -34px))
+    scale(calc(1 + var(--scroll-progress) * 0.08));
+  animation: minimalOrbitalSphere 12s ease-in-out infinite;
+}
+
+.orbital-bg__ring {
+  width: min(52vw, 720px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(196, 228, 255, 0.18);
+  mix-blend-mode: screen;
+}
+
+.orbital-bg__ring--one {
+  transform:
+    translate(-50%, calc(-50% + var(--scroll-progress) * -18px))
+    rotate(calc(var(--scroll-progress) * 220deg))
+    rotateX(74deg);
+  animation: minimalOrbitalRingOne 20s linear infinite;
+}
+
+.orbital-bg__ring--two {
+  width: min(62vw, 860px);
+  border-color: rgba(150, 230, 255, 0.14);
+  transform:
+    translate(-50%, calc(-50% + var(--scroll-progress) * -24px))
+    rotate(calc(38deg + var(--scroll-progress) * -180deg))
+    rotateX(76deg);
+  animation: minimalOrbitalRingTwo 24s linear infinite;
+}
+
+.orbital-bg__ring--three {
+  width: min(42vw, 560px);
+  border-style: dashed;
+  border-color: rgba(255, 216, 176, 0.16);
+  transform:
+    translate(-50%, calc(-50% + var(--scroll-progress) * -12px))
+    rotate(calc(-18deg + var(--scroll-progress) * 240deg))
+    rotateX(72deg);
+  animation: minimalOrbitalRingThree 17s linear infinite;
+}
+
+.orbital-bg__glow {
+  width: min(58vw, 760px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(114, 153, 255, 0.16), rgba(114, 153, 255, 0) 66%);
+  filter: blur(34px);
+  opacity: 0.42;
+  transform: translate(-50%, calc(-50% + var(--scroll-progress) * -20px));
+  animation: minimalOrbitalGlow 10s ease-in-out infinite;
+}
+
+.page-home--minimal .landing-main {
+  padding-top: 146px;
+}
+
+.page-home--minimal .landing-hero {
+  grid-template-columns: 1fr;
+  min-height: min(72vh, 720px);
+  justify-items: center;
+  align-items: center;
+  padding: clamp(20px, 3vw, 34px) 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.page-home--minimal .landing-hero::after {
+  display: none;
+}
+
+.page-home--minimal .landing-hero__copy {
+  width: min(760px, 100%);
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.page-home--minimal .landing-hero__copy h1 {
+  max-width: 12ch;
+  font-size: clamp(3.1rem, 6vw, 5.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.065em;
+}
+
+.page-home--minimal .landing-hero__copy p {
+  max-width: 30rem;
+  color: rgba(224, 232, 247, 0.74);
+  font-size: 1rem;
+  line-height: 1.56;
+}
+
+.page-home--minimal .button-row {
+  justify-content: center;
+}
+
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.hero-pills span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(233, 239, 255, 0.76);
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+}
+
+.page-home--minimal .landing-section {
+  padding-top: 40px;
+}
+
+.page-home--minimal .section-head--minimal {
+  max-width: none;
+  margin: 0 auto 22px;
+  justify-items: center;
+  text-align: center;
+}
+
+.page-home--minimal .section-head--minimal h2 {
+  max-width: none;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+}
+
+.page-home--minimal .landing-grid--minimal {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.page-home--minimal .landing-card--minimal {
+  position: relative;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  min-height: 420px;
+  padding: 20px;
+  border-radius: 28px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(8, 14, 26, 0.58);
+  box-shadow: 0 24px 70px rgba(3, 8, 20, 0.28);
+}
+
+.page-home--minimal .landing-card--minimal .landing-card__content {
+  gap: 10px;
+}
+
+.page-home--minimal .landing-card--minimal h2 {
+  max-width: none;
+  font-size: clamp(1.8rem, 2vw, 2.2rem);
+}
+
+.page-home--minimal .landing-card--minimal p {
+  max-width: 22rem;
+  color: rgba(221, 230, 244, 0.7);
+  font-size: 0.96rem;
+  line-height: 1.48;
+}
+
+.page-home--minimal .landing-card--minimal .button {
+  width: fit-content;
+}
+
+.page-home--minimal .demo-teaser {
+  min-height: 220px;
+  border-radius: 22px;
+}
+
+.page-home--minimal .demo-teaser__bar,
+.page-home--minimal .demo-teaser__meta {
+  display: none;
+}
+
+.page-home--minimal .demo-teaser__frame {
+  min-height: 220px;
+  padding: 16px;
+}
+
+.page-home--minimal .demo-teaser__grid {
+  align-content: end;
+  height: 100%;
+}
+
+.page-home--minimal .demo-teaser__grid .is-hero {
+  min-height: 132px;
+}
+
+.page-home--minimal .landing-strip,
+.page-home--minimal .feature-band {
+  display: none;
+}
+
+@keyframes minimalOrbitalSphere {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 0.92;
+  }
+}
+
+@keyframes minimalOrbitalRingOne {
+  from {
+    transform: translate(-50%, calc(-50% + var(--scroll-progress) * -18px)) rotate(0deg) rotateX(74deg);
+  }
+  to {
+    transform: translate(-50%, calc(-50% + var(--scroll-progress) * -18px)) rotate(360deg) rotateX(74deg);
+  }
+}
+
+@keyframes minimalOrbitalRingTwo {
+  from {
+    transform: translate(-50%, calc(-50% + var(--scroll-progress) * -24px)) rotate(38deg) rotateX(76deg);
+  }
+  to {
+    transform: translate(-50%, calc(-50% + var(--scroll-progress) * -24px)) rotate(-322deg) rotateX(76deg);
+  }
+}
+
+@keyframes minimalOrbitalRingThree {
+  from {
+    transform: translate(-50%, calc(-50% + var(--scroll-progress) * -12px)) rotate(-18deg) rotateX(72deg);
+  }
+  to {
+    transform: translate(-50%, calc(-50% + var(--scroll-progress) * -12px)) rotate(342deg) rotateX(72deg);
+  }
+}
+
+@keyframes minimalOrbitalGlow {
+  0%,
+  100% {
+    opacity: 0.28;
+    filter: blur(30px);
+  }
+  50% {
+    opacity: 0.48;
+    filter: blur(42px);
+  }
+}
+
+@media (max-width: 980px) {
+  .page-home--minimal .landing-grid--minimal {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-home--minimal .landing-main {
+    padding-top: 132px;
+  }
+
+  .page-home--minimal .landing-hero__copy h1 {
+    max-width: 100%;
+    font-size: clamp(2.6rem, 11vw, 4.2rem);
+  }
+
+  .page-home--minimal .landing-hero__copy p {
+    max-width: 24rem;
+  }
+
+  .page-home--minimal .orbital-bg__sphere {
+    width: min(52vw, 250px);
+  }
+
+  .page-home--minimal .orbital-bg__ring--one {
+    width: min(72vw, 420px);
+  }
+
+  .page-home--minimal .orbital-bg__ring--two {
+    width: min(88vw, 520px);
+  }
+
+  .page-home--minimal .orbital-bg__ring--three {
+    width: min(64vw, 340px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbital-bg__sphere,
+  .orbital-bg__ring,
+  .orbital-bg__glow {
+    animation: none !important;
+  }
+}

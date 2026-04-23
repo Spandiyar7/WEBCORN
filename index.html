@@ -10,9 +10,16 @@
     />
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="landing-page page-home">
+  <body class="landing-page page-home page-home--minimal">
     <div class="page-backdrop" aria-hidden="true">
       <canvas id="space-canvas"></canvas>
+      <div class="orbital-bg">
+        <div class="orbital-bg__sphere"></div>
+        <div class="orbital-bg__ring orbital-bg__ring--one"></div>
+        <div class="orbital-bg__ring orbital-bg__ring--two"></div>
+        <div class="orbital-bg__ring orbital-bg__ring--three"></div>
+        <div class="orbital-bg__glow"></div>
+      </div>
       <div class="page-backdrop__stars page-backdrop__stars--far"></div>
       <div class="page-backdrop__stars page-backdrop__stars--near"></div>
       <div class="page-backdrop__glow page-backdrop__glow--one"></div>
@@ -52,105 +59,40 @@
 
     <main class="landing-main">
       <section class="container" id="hero">
-        <div class="landing-hero">
+        <div class="landing-hero landing-hero--minimal">
           <div class="landing-hero__copy" data-reveal>
             <span class="eyebrow">webcorn</span>
-            <h1>Сайт должен продавать уровень бизнеса еще до первого контакта.</h1>
-            <p>
-              webcorn показывает не мокапы, а реальные демо для отелей, клиник и ресторанов.
-              Клиент сразу чувствует класс бренда, видит маршрут к заявке и понимает, почему вам
-              можно доверять.
-            </p>
+            <h1>Премиальные сайты для отелей, клиник и ресторанов.</h1>
+            <p>Открывайте демо. Выбирайте нишу. Запускайте сайт под свой бренд.</p>
 
             <div class="button-row">
-              <a class="button button--primary" href="#demo-examples">Открыть демо и выбрать нишу</a>
+              <a class="button button--primary" href="#demo-examples">Смотреть демо</a>
               <a class="button button--ghost" href="mailto:florencya08090@gmail.com">Обсудить проект</a>
             </div>
 
-            <div class="landing-proof">
-              <div class="landing-proof__item">
-                <strong>9 живых демо</strong>
-                <span>Не картинки-заглушки, а реальные сценарии сайта.</span>
-              </div>
-              <div class="landing-proof__item">
-                <strong>Продажная структура</strong>
-                <span>Подача бренда, доверие и понятный переход к заявке.</span>
-              </div>
-              <div class="landing-proof__item">
-                <strong>Адаптация под ваш бизнес</strong>
-                <span>Контент, оффер и визуал под конкретную нишу и бренд.</span>
-              </div>
+            <div class="hero-pills">
+              <span>3 ниши</span>
+              <span>9 демо</span>
+              <span>Под ваш бренд</span>
             </div>
           </div>
-
-          <aside class="sales-stage" data-reveal>
-            <div class="sales-stage__halo"></div>
-            <div class="sales-stage__grid"></div>
-            <div class="sales-stage__ring sales-stage__ring--one"></div>
-            <div class="sales-stage__ring sales-stage__ring--two"></div>
-            <div class="sales-stage__ring sales-stage__ring--three"></div>
-
-            <div class="sales-stage__panel sales-stage__panel--main">
-              <span class="summary-badge">webcorn system</span>
-              <strong>Дорого выглядит. Быстро объясняет. Ведет к заявке.</strong>
-              <p>3 ниши / 9 живых демо / premium-подача вместо дешевого шаблона.</p>
-            </div>
-
-            <div class="sales-stage__metric sales-stage__metric--alpha">
-              <strong>9</strong>
-              <span>живых демо</span>
-            </div>
-
-            <div class="sales-stage__metric sales-stage__metric--beta">
-              <strong>3D + motion</strong>
-              <span>первый экран с ощущением уровня</span>
-            </div>
-
-            <div class="sales-stage__metric sales-stage__metric--gamma">
-              <strong>Демо → доверие → заявка</strong>
-              <span>логика страницы под продажу, а не ради красоты</span>
-            </div>
-          </aside>
         </div>
       </section>
 
-      <div class="landing-strip" data-reveal>
-        <div class="landing-strip__item">
-          <strong>Реальные демо</strong>
-          <span>Клиент сразу видит не обещание, а уровень исполнения.</span>
-        </div>
-        <div class="landing-strip__item">
-          <strong>3D атмосфера</strong>
-          <span>Первый экран создает ощущение дорогого digital-опыта.</span>
-        </div>
-        <div class="landing-strip__item">
-          <strong>Маршрут к заявке</strong>
-          <span>Структура собирает доверие и мягко ведет дальше.</span>
-        </div>
-        <div class="landing-strip__item">
-          <strong>Под ваш бренд</strong>
-          <span>Адаптируем контент, оффер и подачу под конкретный бизнес.</span>
-        </div>
-      </div>
-
       <section class="landing-section" id="demo-examples">
         <div class="container">
-          <div class="section-head" data-reveal>
-            <span class="eyebrow">Примеры демо</span>
-            <h2>Посмотрите примеры демо по нишам.</h2>
-            <p>
-              Каждое направление открывает отдельную подборку с Lite, Pro и Signature. На главной
-              остается только атмосфера и выбор маршрута.
-            </p>
+          <div class="section-head section-head--minimal" data-reveal>
+            <span class="eyebrow">Демо</span>
+            <h2>Выберите нишу.</h2>
           </div>
 
-          <div class="landing-grid">
-            <article class="landing-card theme-hotel" data-reveal>
+          <div class="landing-grid landing-grid--minimal">
+            <article class="landing-card landing-card--minimal theme-hotel" data-reveal>
               <div class="landing-card__content">
                 <span class="landing-card__eyebrow">Отели</span>
-                <h2>Примеры для отелей.</h2>
-                <p>Номерной фонд, сервис, прямые запросы и визуал уровня boutique/premium.</p>
-                <a class="button button--primary" href="hotel.html">Открыть примеры отелей</a>
+                <h2>Отели.</h2>
+                <p>Номера, сервис, бронирование.</p>
+                <a class="button button--primary" href="hotel.html">Открыть</a>
               </div>
               <div class="landing-card__window">
                 <div class="demo-teaser theme-hotel" aria-hidden="true">
@@ -173,12 +115,12 @@
               </div>
             </article>
 
-            <article class="landing-card theme-clinic" data-reveal>
+            <article class="landing-card landing-card--minimal theme-clinic" data-reveal>
               <div class="landing-card__content">
                 <span class="landing-card__eyebrow">Клиники</span>
-                <h2>Примеры для клиник.</h2>
-                <p>Услуги, врачи, доверие, технологии и маршрут пациента без визуального шума.</p>
-                <a class="button button--primary" href="clinic.html">Открыть примеры клиник</a>
+                <h2>Клиники.</h2>
+                <p>Услуги, доверие, запись.</p>
+                <a class="button button--primary" href="clinic.html">Открыть</a>
               </div>
               <div class="landing-card__window">
                 <div class="demo-teaser theme-clinic" aria-hidden="true">
@@ -201,12 +143,12 @@
               </div>
             </article>
 
-            <article class="landing-card theme-restaurant" data-reveal>
+            <article class="landing-card landing-card--minimal theme-restaurant" data-reveal>
               <div class="landing-card__content">
                 <span class="landing-card__eyebrow">Рестораны</span>
-                <h2>Примеры для ресторанов.</h2>
-                <p>Меню, бронирование, события и премиальная атмосфера бренда.</p>
-                <a class="button button--primary" href="restaurant.html">Открыть примеры ресторанов</a>
+                <h2>Рестораны.</h2>
+                <p>Меню, бронь, атмосфера.</p>
+                <a class="button button--primary" href="restaurant.html">Открыть</a>
               </div>
               <div class="landing-card__window">
                 <div class="demo-teaser theme-restaurant" aria-hidden="true">
@@ -227,31 +169,6 @@
                   </div>
                 </div>
               </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="landing-section">
-        <div class="container">
-          <div class="section-head" data-reveal>
-            <span class="eyebrow">Уровни</span>
-            <h2>Одна логика для всех ниш.</h2>
-            <p>Lite для быстрого старта, Pro для основного коммерческого сценария, Signature для дорогой подачи бренда.</p>
-          </div>
-
-          <div class="feature-band">
-            <article class="feature-band__card" data-reveal>
-              <strong>Lite</strong>
-              <p>Минимум экранов, быстрый запуск, чистая структура.</p>
-            </article>
-            <article class="feature-band__card" data-reveal>
-              <strong>Pro</strong>
-              <p>Больше разделов, сильнее доверие, заметнее путь к заявке.</p>
-            </article>
-            <article class="feature-band__card" data-reveal>
-              <strong>Signature</strong>
-              <p>Премиальная подача, больше контента и самый сильный образ бренда.</p>
             </article>
           </div>
         </div>

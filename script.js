@@ -129,7 +129,7 @@ const initSpaceScene = async () => {
   }
   if (THREE.ACESFilmicToneMapping) {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.18;
+    renderer.toneMappingExposure = 1.34;
   }
   scene.background = new THREE.Color(0x020713);
   scene.fog = new THREE.FogExp2(0x020713, 0.026);
@@ -177,7 +177,7 @@ const initSpaceScene = async () => {
       roughness: 0.86,
       metalness: 0.02,
       emissive: new THREE.Color(0x1f160b),
-      emissiveIntensity: 0.18,
+      emissiveIntensity: 0.28,
       color: 0xffffff,
     }),
     rings: new THREE.MeshStandardMaterial({
@@ -192,6 +192,8 @@ const initSpaceScene = async () => {
       alphaTest: 0.035,
       opacity: 0.98,
       side: THREE.DoubleSide,
+      emissive: new THREE.Color(0x241404),
+      emissiveIntensity: 0.16,
       color: 0xffffff,
     }),
     moon: new THREE.MeshStandardMaterial({
@@ -262,7 +264,7 @@ const initSpaceScene = async () => {
     new THREE.ShaderMaterial({
       uniforms: {
         glowColor: { value: new THREE.Color(0x80caff) },
-        intensity: { value: 0.24 },
+        intensity: { value: 0.32 },
       },
       vertexShader: `
         varying vec3 vNormal;
@@ -409,14 +411,14 @@ const initSpaceScene = async () => {
     saturnGroup.add(saturnModel);
   });
 
-  scene.add(new THREE.AmbientLight(0xffead0, 0.72));
-  const keyLight = new THREE.DirectionalLight(0xffffff, 4.4);
+  scene.add(new THREE.AmbientLight(0xffead0, 0.92));
+  const keyLight = new THREE.DirectionalLight(0xffffff, 5.2);
   keyLight.position.set(5.8, 3.2, 4.8);
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight(0x84cfff, 1.18);
+  const fillLight = new THREE.DirectionalLight(0x9edbff, 1.55);
   fillLight.position.set(-3.2, 1.8, 3.4);
   scene.add(fillLight);
-  const rimLight = new THREE.DirectionalLight(0x65d8ff, 1.75);
+  const rimLight = new THREE.DirectionalLight(0x8ce4ff, 2.15);
   rimLight.position.set(-4, 1.6, -2);
   scene.add(rimLight);
 
@@ -424,6 +426,7 @@ const initSpaceScene = async () => {
   let autoRotationY = 0;
   let scrollRotationY = 0;
   let scrollSpinVelocity = 0;
+  let targetScrollSpinVelocity = 0;
   let lastScrollY = window.scrollY;
   let renderedProgress = 0;
   let frameId;
@@ -444,7 +447,7 @@ const initSpaceScene = async () => {
         trigger: ".journey",
         start: "top top",
         end: "bottom bottom",
-        scrub: 1.6,
+        scrub: 2.8,
       },
     });
   } else {
@@ -465,13 +468,13 @@ const initSpaceScene = async () => {
       return;
     }
 
-    scrollSpinVelocity += Math.max(-80, Math.min(80, delta)) * 0.0018;
+    targetScrollSpinVelocity += Math.max(-55, Math.min(55, delta)) * 0.00095;
   };
 
   window.addEventListener("scroll", updateScrollSpin, { passive: true });
 
   const render = () => {
-    renderedProgress += (motion.progress - renderedProgress) * 0.04;
+    renderedProgress += (motion.progress - renderedProgress) * 0.025;
     const eased = renderedProgress * renderedProgress * (3 - 2 * renderedProgress);
 
     const narrowScreen = window.innerWidth < 760;
@@ -484,8 +487,10 @@ const initSpaceScene = async () => {
     camera.lookAt(0, -0.04, -5.3);
 
     autoRotationY += 0.00078;
+    scrollSpinVelocity += (targetScrollSpinVelocity - scrollSpinVelocity) * 0.075;
     scrollRotationY += scrollSpinVelocity;
-    scrollSpinVelocity *= 0.9;
+    targetScrollSpinVelocity *= 0.88;
+    scrollSpinVelocity *= 0.94;
 
     saturnGroup.rotation.y = autoRotationY + scrollRotationY;
     saturnGroup.rotation.x = -0.02 + eased * 0.03;
@@ -498,7 +503,7 @@ const initSpaceScene = async () => {
     glow.position.y = saturnGroup.position.y;
     glow.position.z = saturnGroup.position.z;
     glow.scale.setScalar(narrowScreen ? 0.74 : 0.96);
-    glow.material.uniforms.intensity.value = 0.18 + eased * 0.08;
+    glow.material.uniforms.intensity.value = 0.26 + eased * 0.1;
 
     deepStars.rotation.y += 0.00012;
     stars.rotation.y += 0.00025;

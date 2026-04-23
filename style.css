@@ -45,8 +45,9 @@ body::before {
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(2, 4, 10, 0.04), rgba(2, 4, 10, 0.46)),
-    radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.28) 100%);
+    linear-gradient(90deg, rgba(2, 4, 10, 0.88) 0%, rgba(2, 4, 10, 0.7) 42%, rgba(2, 4, 10, 0.3) 100%),
+    linear-gradient(180deg, rgba(2, 4, 10, 0.08), rgba(2, 4, 10, 0.5)),
+    radial-gradient(circle at 82% 38%, transparent 0%, rgba(0, 0, 0, 0.3) 72%);
 }
 
 a {
@@ -239,6 +240,7 @@ h3 {
   max-width: 960px;
   margin: 0 auto;
   text-align: center;
+  text-shadow: 0 18px 48px rgba(0, 0, 0, 0.62);
 }
 
 .hero-copy__text {
@@ -325,7 +327,7 @@ h3 {
   border: 1px solid var(--line);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.018)),
-    rgba(4, 10, 20, 0.6);
+    rgba(4, 10, 20, 0.78);
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.24);
   backdrop-filter: blur(18px);
 }

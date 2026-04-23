@@ -293,7 +293,7 @@ const initSpaceScene = async () => {
       blending: THREE.AdditiveBlending,
     })
   );
-  glow.position.set(2.08, -0.08, -5.4);
+  glow.position.set(2.7, -0.1, -5.25);
   group.add(glow);
 
   const chooseMaterial = (sourceName = "") => {
@@ -390,8 +390,8 @@ const initSpaceScene = async () => {
 
   const fallbackSaturn = createFallbackSaturn();
   saturnGroup.add(fallbackSaturn);
-  saturnGroup.position.set(1.38, -0.04, -4.72);
-  saturnGroup.scale.setScalar(1.34);
+  saturnGroup.position.set(2.7, -0.1, -5.25);
+  saturnGroup.scale.setScalar(1.2);
 
   loadSaturnModel().then((saturnModel) => {
     saturnModel.scale.multiplyScalar(1.18);
@@ -452,18 +452,18 @@ const initSpaceScene = async () => {
     renderedProgress += (motion.progress - renderedProgress) * 0.04;
     const eased = renderedProgress * renderedProgress * (3 - 2 * renderedProgress);
 
-    camera.position.x = 0.04 + eased * 0.2;
-    camera.position.y = 0.2 - eased * 0.08;
-    camera.position.z = 8.35 - eased * 1.08;
-    camera.lookAt(0.72 + eased * 0.16, -0.04, -4.72);
+    camera.position.x = 0.02 + eased * 0.18;
+    camera.position.y = 0.18 - eased * 0.06;
+    camera.position.z = 8.55 - eased * 0.95;
+    camera.lookAt(0.24 + eased * 0.16, -0.04, -5.05);
 
     autoRotationY += 0.00072;
     saturnGroup.rotation.y = autoRotationY + eased * Math.PI * 1.35;
     saturnGroup.rotation.x = -0.02 + eased * 0.035;
     saturnGroup.rotation.z = -0.015 - eased * 0.025;
-    saturnGroup.position.x = 1.38 - eased * 0.12;
-    saturnGroup.position.y = -0.04 + eased * 0.06;
-    saturnGroup.scale.setScalar(1.34 + eased * 0.13);
+    saturnGroup.position.x = 2.7 - eased * 0.18;
+    saturnGroup.position.y = -0.1 + eased * 0.04;
+    saturnGroup.scale.setScalar(1.2 + eased * 0.12);
     glow.position.x = saturnGroup.position.x;
     glow.position.y = saturnGroup.position.y;
     glow.material.uniforms.intensity.value = 0.18 + eased * 0.08;

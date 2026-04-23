@@ -416,6 +416,7 @@ const initSpaceScene = async () => {
   scene.add(rimLight);
 
   const motion = { progress: 0 };
+  let autoRotationY = 0;
   let renderedProgress = 0;
   let frameId;
 
@@ -456,7 +457,8 @@ const initSpaceScene = async () => {
     camera.position.z = 8.35 - eased * 0.52;
     camera.lookAt(0.72 + eased * 0.18, -0.04, -4.72);
 
-    saturnGroup.rotation.y += 0.00105;
+    autoRotationY += 0.00072;
+    saturnGroup.rotation.y = autoRotationY + eased * Math.PI * 1.35;
     saturnGroup.rotation.x = -0.02 + eased * 0.035;
     saturnGroup.rotation.z = -0.015 - eased * 0.025;
     saturnGroup.position.x = 1.38 - eased * 0.18;

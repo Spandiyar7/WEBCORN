@@ -1835,6 +1835,93 @@
     "Открыть примеры ресторанов": entry("Open restaurant examples")
   });
 
+  Object.assign(TEXTS, {
+    "webcorn — cinematic сайты с реальными демо": entry(
+      "webcorn — cinematic websites with real demos"
+    ),
+    "webcorn показывает cinematic демо-сайты для отелей, клиник и ресторанов. Откройте лучшие демо, выберите структуру и запустите сайт под свой бренд.": entry(
+      "webcorn shows cinematic demo websites for hotels, clinics, and restaurants. Open the best demos, choose a structure, and launch a website for your brand."
+    ),
+    "Лучшие демо": entry("Best demos"),
+    "Структуры": entry("Structures"),
+    "Этапы": entry("Steps"),
+    "Открыть демо": entry("Open demos"),
+    "webcorn / cinematic launch": entry("webcorn / cinematic launch"),
+    "Сайты, которые сразу поднимают уровень бренда.": entry(
+      "Websites that instantly raise the level of the brand."
+    ),
+    "Отели, клиники и рестораны. Открывайте реальные демо, выбирайте готовую структуру и запускайте сайт под свой бренд.": entry(
+      "Hotels, clinics, and restaurants. Open real demos, choose a ready-made structure, and launch a website for your brand."
+    ),
+    "Открыть лучшие демо": entry("Open best demos"),
+    "Смотреть структуры": entry("View structures"),
+    "Премиальные демо для реальных ниш": entry("Premium demos for real niches"),
+    "Отели. Клиники. Рестораны.": entry("Hotels. Clinics. Restaurants."),
+    "Частый выбор": entry("Frequent choice"),
+    "Визуальный класс": entry("Visual class"),
+    "ниши": entry("niches"),
+    "заявка до старта": entry("inquiry to start"),
+    "Три сильных примера, с которых обычно начинается выбор.": entry(
+      "Three strong examples that usually start the selection."
+    ),
+    "Откройте демо в полный экран и сразу почувствуйте, как должен выглядеть ваш сайт.": entry(
+      "Open a demo in full screen and immediately feel how your website should look."
+    ),
+    "Отель / Signature": entry("Hotel / Signature"),
+    "Премиальная подача для бутик-отеля и прямого бронирования.": entry(
+      "Premium presentation for a boutique hotel and direct booking."
+    ),
+    "Клиника / Pro": entry("Clinic / Pro"),
+    "Чистая подача, доверие и ясный путь к записи.": entry(
+      "Clean presentation, trust, and a clear path to booking."
+    ),
+    "Ресторан / Signature": entry("Restaurant / Signature"),
+    "Темная премиальная подача с акцентом на атмосферу.": entry(
+      "A dark premium presentation with an emphasis on atmosphere."
+    ),
+    "Стартуйте с реальной структуры, а не с пустого листа.": entry(
+      "Start from a real structure, not from a blank page."
+    ),
+    "Каждая ниша уже собрана в 3 уровня: Lite, Pro и Signature.": entry(
+      "Each niche already comes in 3 tiers: Lite, Pro, and Signature."
+    ),
+    "Номера, сервис, прямой запрос и ощущение класса объекта.": entry(
+      "Rooms, service, direct inquiries, and the feeling of a high-class property."
+    ),
+    "Открыть каталог": entry("Open catalog"),
+    "Услуги, доверие, врачебная подача и путь к записи.": entry(
+      "Services, trust, medical presentation, and the path to booking."
+    ),
+    "Меню, бронь, визуальный аппетит и атмосфера бренда.": entry(
+      "Menu, booking, visual appetite, and brand atmosphere."
+    ),
+    "Короткий путь от выбора демо до сайта под ваш бренд.": entry(
+      "A short path from choosing a demo to a website for your brand."
+    ),
+    "Выбираете демо": entry("Choose a demo"),
+    "Открываете 3 готовых уровня по своей нише и выбираете направление.": entry(
+      "Open 3 ready-made tiers for your niche and choose the direction."
+    ),
+    "Фиксируем структуру": entry("Lock the structure"),
+    "Берем сильный сценарий и подстраиваем его под ваш бизнес и задачу.": entry(
+      "We take a strong scenario and adapt it to your business and task."
+    ),
+    "Собираем контент": entry("Collect content"),
+    "Тексты, фото, оффер, контакты и нужные акценты под ваш бренд.": entry(
+      "Texts, photos, offer, contacts, and the right accents for your brand."
+    ),
+    "Запускаем": entry("Launch"),
+    "Сайт появляется на вашем домене и работает как полноценная продажная витрина.": entry(
+      "The website goes live on your domain and works as a full sales showcase."
+    ),
+    "Старт": entry("Launch"),
+    "Подберем формат под ваш бренд.": entry("We will choose the right format for your brand."),
+    "Если нужен сайт с сильной cinematic-подачей, начните с демо webcorn.": entry(
+      "If you need a website with a strong cinematic presentation, start with a webcorn demo."
+    ),
+    "Смотреть все демо": entry("View all demos")
+  });
+
   const getStoredLanguage = () => {
     const value = window.localStorage?.getItem(STORAGE_KEY) ?? "ru";
     return LANGUAGES.includes(value) ? value : "ru";

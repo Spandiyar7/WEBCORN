@@ -66,6 +66,7 @@ const EARTH_ASSETS = {
   diffuse: "assets/space/earth-blue-marble-3072.jpg",
   clouds: "assets/space/earth-clouds-1024.png",
   specular: "assets/space/earth-specular-2048.jpg",
+  normal: "assets/space/earth-normal-2048.jpg",
 };
 
 const initSpaceScene = () => {
@@ -137,20 +138,24 @@ const initSpaceScene = () => {
   const earthTexture = loadTexture(EARTH_ASSETS.diffuse, true);
   const cloudTexture = loadTexture(EARTH_ASSETS.clouds, true);
   const specularTexture = loadTexture(EARTH_ASSETS.specular);
+  const normalTexture = loadTexture(EARTH_ASSETS.normal);
 
   const earth = new THREE.Mesh(
     new THREE.SphereGeometry(2.2, 128, 128),
     new THREE.MeshPhongMaterial({
       map: earthTexture,
+      normalMap: normalTexture,
+      normalScale: new THREE.Vector2(0.46, 0.46),
       specularMap: specularTexture,
       color: 0xffffff,
       emissive: new THREE.Color(0x143a66),
-      emissiveIntensity: 0.16,
-      specular: new THREE.Color(0x79cfff),
-      shininess: 26,
+      emissiveIntensity: 0.1,
+      specular: new THREE.Color(0x8ad6ff),
+      shininess: 34,
     })
   );
   earth.position.set(2.5, -0.25, -5.8);
+  earth.rotation.set(-0.34, 0.7, -0.18);
   group.add(earth);
 
   const clouds = new THREE.Mesh(
@@ -164,42 +169,97 @@ const initSpaceScene = () => {
     })
   );
   clouds.position.copy(earth.position);
+  clouds.rotation.copy(earth.rotation);
   group.add(clouds);
 
+  const rimAtmosphereMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      glowColor: { value: new THREE.Color(0x69d9ff) },
+      intensity: { value: 1.0 },
+    },
+    vertexShader: `
+      varying vec3 vNormal;
+      varying vec3 vViewPosition;
+
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        vNormal = normalize(normalMatrix * normal);
+        vViewPosition = -mvPosition.xyz;
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 glowColor;
+      uniform float intensity;
+      varying vec3 vNormal;
+      varying vec3 vViewPosition;
+
+      void main() {
+        float rim = 1.0 - max(dot(normalize(vNormal), normalize(vViewPosition)), 0.0);
+        float glow = pow(rim, 2.35) * intensity;
+        gl_FragColor = vec4(glowColor, glow);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.BackSide,
+    blending: THREE.AdditiveBlending,
+  });
+
   const atmosphere = new THREE.Mesh(
-    new THREE.SphereGeometry(2.38, 96, 96),
-    new THREE.MeshBasicMaterial({
-      color: 0x64d8ff,
-      transparent: true,
-      opacity: 0.18,
-      side: THREE.BackSide,
-      blending: THREE.AdditiveBlending,
-    })
+    new THREE.SphereGeometry(2.42, 128, 128),
+    rimAtmosphereMaterial
   );
   atmosphere.position.copy(earth.position);
+  atmosphere.rotation.copy(earth.rotation);
   group.add(atmosphere);
 
   const surfaceGlow = new THREE.Mesh(
-    new THREE.SphereGeometry(2.52, 96, 96),
-    new THREE.MeshBasicMaterial({
-      color: 0x8e7bff,
+    new THREE.SphereGeometry(2.55, 128, 128),
+    new THREE.ShaderMaterial({
+      uniforms: {
+        glowColor: { value: new THREE.Color(0x7f8cff) },
+      },
+      vertexShader: `
+        varying vec3 vNormal;
+        varying vec3 vViewPosition;
+
+        void main() {
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          vNormal = normalize(normalMatrix * normal);
+          vViewPosition = -mvPosition.xyz;
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 glowColor;
+        varying vec3 vNormal;
+        varying vec3 vViewPosition;
+
+        void main() {
+          float rim = 1.0 - max(dot(normalize(vNormal), normalize(vViewPosition)), 0.0);
+          float glow = pow(rim, 3.4) * 0.55;
+          gl_FragColor = vec4(glowColor, glow);
+        }
+      `,
       transparent: true,
-      opacity: 0.08,
+      depthWrite: false,
       side: THREE.BackSide,
       blending: THREE.AdditiveBlending,
     })
   );
   surfaceGlow.position.copy(earth.position);
+  surfaceGlow.rotation.copy(earth.rotation);
   group.add(surfaceGlow);
 
-  scene.add(new THREE.AmbientLight(0xcfeaff, 0.78));
-  const keyLight = new THREE.DirectionalLight(0xffffff, 3.1);
-  keyLight.position.set(6.5, 2.8, 5.2);
+  scene.add(new THREE.AmbientLight(0xcfeaff, 0.5));
+  const keyLight = new THREE.DirectionalLight(0xffffff, 3.65);
+  keyLight.position.set(7.2, 3.4, 5.7);
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight(0x8fcfff, 1.1);
+  const fillLight = new THREE.DirectionalLight(0x8fcfff, 0.72);
   fillLight.position.set(-2.8, 1.4, 4.5);
   scene.add(fillLight);
-  const rimLight = new THREE.DirectionalLight(0x65d8ff, 1.25);
+  const rimLight = new THREE.DirectionalLight(0x65d8ff, 1.7);
   rimLight.position.set(-4, 1.6, -2);
   scene.add(rimLight);
 
@@ -228,12 +288,12 @@ const initSpaceScene = () => {
 
     earth.rotation.y += 0.0018;
     clouds.rotation.y += 0.00235;
-    atmosphere.rotation.y -= 0.001;
+    atmosphere.rotation.y = earth.rotation.y - 0.04;
+    surfaceGlow.rotation.y = earth.rotation.y - 0.08;
     stars.rotation.y += 0.00025;
     group.rotation.x = -eased * 0.08;
 
-    atmosphere.material.opacity = 0.18 + eased * 0.24;
-    surfaceGlow.material.opacity = 0.07 + eased * 0.15;
+    atmosphere.material.uniforms.intensity.value = 0.78 + eased * 0.4;
     stars.material.opacity = 0.72 - eased * 0.28;
 
     renderer.render(scene, camera);

@@ -3,351 +3,153 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>webcorn — cinematic сайты с реальными демо</title>
     <meta
       name="description"
-      content="webcorn показывает cinematic демо-сайты для отелей, клиник и ресторанов. Откройте лучшие демо, выберите структуру и запустите сайт под свой бренд."
+      content="Webcorn создает премиальные сайты для бизнеса: чистый дизайн, сильная структура и запуск без визуального хаоса."
+    />
+    <title>Webcorn — сайты, которые продают</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="landing-page page-home page-home--minimal page-home--draftly">
-    <div class="page-backdrop" aria-hidden="true">
-      <canvas id="space-canvas"></canvas>
-      <div class="orbital-bg">
-        <div class="orbital-bg__sphere"></div>
-        <div class="orbital-bg__ring orbital-bg__ring--one"></div>
-        <div class="orbital-bg__ring orbital-bg__ring--two"></div>
-        <div class="orbital-bg__ring orbital-bg__ring--three"></div>
-        <div class="orbital-bg__glow"></div>
-      </div>
-      <div class="page-backdrop__stars page-backdrop__stars--far"></div>
-      <div class="page-backdrop__stars page-backdrop__stars--near"></div>
-      <div class="page-backdrop__glow page-backdrop__glow--one"></div>
-      <div class="page-backdrop__glow page-backdrop__glow--two"></div>
-      <div class="space-overlay"></div>
-      <div class="page-noise"></div>
-    </div>
+  <body>
+    <canvas id="scene" aria-hidden="true"></canvas>
 
-    <header class="site-header">
-      <div class="site-header__inner">
-        <a class="brand" href="index.html" aria-label="webcorn">
-          <span class="brand__mark"><span>W</span></span>
-          <span class="brand__copy">
-            <strong>webcorn</strong>
-            <span>Готовые сайты под ниши</span>
-          </span>
+    <header class="header">
+      <div class="container header__inner">
+        <a class="logo" href="#hero" aria-label="Webcorn">
+          <span class="logo__mark">W</span>
+          <span>Webcorn</span>
         </a>
 
-        <nav class="site-nav" aria-label="Главная навигация">
-          <a href="#hero">Старт</a>
-          <a href="#best-previews">Лучшие демо</a>
-          <a href="#templates">Структуры</a>
-          <a href="#pipeline">Этапы</a>
-          <a href="account.html" data-account-link>Войти</a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a href="#packages">Пакеты</a>
+          <a href="#about">О нас</a>
+          <a href="#start">Старт</a>
         </nav>
-
-        <a class="button button--primary site-header__cta" href="#best-previews">Открыть демо</a>
-
-        <button class="nav-toggle" type="button" data-nav-toggle aria-label="Открыть меню">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
       </div>
     </header>
 
-    <main class="landing-main">
-      <section class="container" id="hero">
-        <div class="landing-hero landing-hero--draftly">
-          <div class="landing-hero__copy" data-reveal>
-            <span class="eyebrow">webcorn / cinematic launch</span>
-            <h1>Сайты, которые сразу поднимают уровень бренда.</h1>
-            <p>
-              Отели, клиники и рестораны. Открывайте реальные демо, выбирайте готовую
-              структуру и запускайте сайт под свой бренд.
-            </p>
-
-            <div class="button-row">
-              <a class="button button--primary" href="#best-previews">Открыть лучшие демо</a>
-              <a class="button button--ghost" href="#templates">Смотреть структуры</a>
-            </div>
-
-            <div class="hero-pills">
-              <span>9 живых демо</span>
-              <span>Продажная структура</span>
-              <span>Под ваш бренд</span>
-            </div>
+    <main class="site">
+      <section class="section hero" id="hero">
+        <div class="container split">
+          <div class="hero__content" data-reveal>
+            <p class="eyebrow">Premium web studio</p>
+            <h1>Webcorn</h1>
+            <p class="hero__subtitle">Сайты, которые продают</p>
+            <a class="button" href="#start">Начать проект</a>
           </div>
 
-          <div class="home-stage" data-reveal>
-            <div class="home-stage__grid" aria-hidden="true"></div>
-            <div class="home-stage__orb" aria-hidden="true"></div>
-            <div class="home-stage__ring home-stage__ring--one" aria-hidden="true"></div>
-            <div class="home-stage__ring home-stage__ring--two" aria-hidden="true"></div>
-            <div class="home-stage__beam" aria-hidden="true"></div>
-
-            <div class="home-stage__panel home-stage__panel--main">
-              <span class="home-stage__label">webcorn system</span>
-              <strong>Премиальные демо для реальных ниш</strong>
-              <p>Отели. Клиники. Рестораны.</p>
+          <div class="visual-panel" data-reveal>
+            <div class="visual-panel__top">
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
-
-            <div class="home-stage__panel home-stage__panel--floating home-stage__panel--one">
-              <span class="home-stage__label">Лучшие демо</span>
-              <strong>Maison Orbit</strong>
-              <p>Отель / Signature</p>
-            </div>
-
-            <div class="home-stage__panel home-stage__panel--floating home-stage__panel--two">
-              <span class="home-stage__label">Частый выбор</span>
-              <strong>Nordic Care</strong>
-              <p>Клиника / Pro</p>
-            </div>
-
-            <div class="home-stage__panel home-stage__panel--floating home-stage__panel--three">
-              <span class="home-stage__label">Визуальный класс</span>
-              <strong>Noir Atelier</strong>
-              <p>Ресторан / Signature</p>
-            </div>
-
-            <div class="home-stage__metrics">
-              <div class="home-stage__metric">
-                <strong>09</strong>
-                <span>живых демо</span>
-              </div>
-              <div class="home-stage__metric">
-                <strong>03</strong>
-                <span>ниши</span>
-              </div>
-              <div class="home-stage__metric">
-                <strong>01</strong>
-                <span>заявка до старта</span>
+            <div class="visual-panel__body">
+              <div class="visual-panel__title"></div>
+              <div class="visual-panel__line"></div>
+              <div class="visual-panel__grid">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="landing-section landing-section--draftly" id="best-previews">
+      <section class="section" id="packages">
         <div class="container">
-          <div class="section-head section-head--draftly" data-reveal>
-            <span class="eyebrow">Лучшие демо</span>
-            <h2>Три сильных примера, с которых обычно начинается выбор.</h2>
-            <p>Откройте демо в полный экран и сразу почувствуйте, как должен выглядеть ваш сайт.</p>
+          <div class="section-head" data-reveal>
+            <p class="eyebrow">Пакеты</p>
+            <h2>Выберите уровень запуска</h2>
           </div>
 
-          <div class="draftly-preview-grid">
-            <article class="draftly-preview-card theme-hotel" data-reveal>
-              <div class="draftly-preview-card__visual">
-                <div class="draftly-preview-card__glow"></div>
-                <div class="draftly-preview-card__window">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                <div class="draftly-preview-card__screen">
-                  <div class="draftly-preview-card__hero"></div>
-                  <div class="draftly-preview-card__rows">
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
+          <div class="packages">
+            <article class="card" data-reveal>
+              <div>
+                <h3>Basic</h3>
+                <ul>
+                  <li>Лендинг</li>
+                  <li>Адаптивный дизайн</li>
+                  <li>Форма заявки</li>
+                </ul>
               </div>
-              <div class="draftly-preview-card__content">
-                <span class="landing-card__eyebrow">Отель / Signature</span>
-                <h3>Maison Orbit</h3>
-                <p>Премиальная подача для бутик-отеля и прямого бронирования.</p>
-                <a class="button button--ghost" href="preview-hotel-signature.html">Открыть демо</a>
+              <div class="card__bottom">
+                <p class="price">от $900</p>
+                <a class="button button--secondary" href="#start">Выбрать</a>
               </div>
             </article>
 
-            <article class="draftly-preview-card theme-clinic" data-reveal>
-              <div class="draftly-preview-card__visual">
-                <div class="draftly-preview-card__glow"></div>
-                <div class="draftly-preview-card__window">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                <div class="draftly-preview-card__screen">
-                  <div class="draftly-preview-card__hero"></div>
-                  <div class="draftly-preview-card__rows">
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
+            <article class="card card--featured" data-reveal>
+              <div>
+                <p class="badge">Популярный</p>
+                <h3>Pro</h3>
+                <ul>
+                  <li>Многостраничный сайт</li>
+                  <li>Премиальная структура</li>
+                  <li>Базовая SEO-подготовка</li>
+                </ul>
               </div>
-              <div class="draftly-preview-card__content">
-                <span class="landing-card__eyebrow">Клиника / Pro</span>
-                <h3>Nordic Care</h3>
-                <p>Чистая подача, доверие и ясный путь к записи.</p>
-                <a class="button button--ghost" href="preview-clinic-pro.html">Открыть демо</a>
+              <div class="card__bottom">
+                <p class="price">от $1,800</p>
+                <a class="button" href="#start">Выбрать</a>
               </div>
             </article>
 
-            <article class="draftly-preview-card theme-restaurant" data-reveal>
-              <div class="draftly-preview-card__visual">
-                <div class="draftly-preview-card__glow"></div>
-                <div class="draftly-preview-card__window">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                <div class="draftly-preview-card__screen">
-                  <div class="draftly-preview-card__hero"></div>
-                  <div class="draftly-preview-card__rows">
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
+            <article class="card" data-reveal>
+              <div>
+                <h3>Premium</h3>
+                <ul>
+                  <li>Индивидуальная концепция</li>
+                  <li>Анимации и визуал</li>
+                  <li>Запуск под ключ</li>
+                </ul>
               </div>
-              <div class="draftly-preview-card__content">
-                <span class="landing-card__eyebrow">Ресторан / Signature</span>
-                <h3>Noir Atelier</h3>
-                <p>Темная премиальная подача с акцентом на атмосферу.</p>
-                <a class="button button--ghost" href="preview-restaurant-signature.html">Открыть демо</a>
+              <div class="card__bottom">
+                <p class="price">от $3,000</p>
+                <a class="button button--secondary" href="#start">Выбрать</a>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="landing-section landing-section--draftly" id="templates">
-        <div class="container">
-          <div class="section-head section-head--draftly" data-reveal>
-            <span class="eyebrow">Структуры</span>
-            <h2>Стартуйте с реальной структуры, а не с пустого листа.</h2>
-            <p>Каждая ниша уже собрана в 3 уровня: Lite, Pro и Signature.</p>
+      <section class="section" id="about">
+        <div class="container split value">
+          <div data-reveal>
+            <p class="eyebrow">Ценность</p>
+            <h2>Сайт должен выглядеть дорого и работать понятно.</h2>
           </div>
-
-          <div class="draftly-template-grid">
-            <article class="draftly-template-card theme-hotel" data-reveal>
-              <div class="draftly-template-card__head">
-                <span class="landing-card__eyebrow">Отели</span>
-                <h3>Отели</h3>
-              </div>
-              <p>Номера, сервис, прямой запрос и ощущение класса объекта.</p>
-              <div class="draftly-tag-row">
-                <span>Lite</span>
-                <span>Pro</span>
-                <span>Signature</span>
-              </div>
-              <a class="button button--primary" href="hotel.html">Открыть каталог</a>
-            </article>
-
-            <article class="draftly-template-card theme-clinic" data-reveal>
-              <div class="draftly-template-card__head">
-                <span class="landing-card__eyebrow">Клиники</span>
-                <h3>Клиники</h3>
-              </div>
-              <p>Услуги, доверие, врачебная подача и путь к записи.</p>
-              <div class="draftly-tag-row">
-                <span>Lite</span>
-                <span>Pro</span>
-                <span>Signature</span>
-              </div>
-              <a class="button button--primary" href="clinic.html">Открыть каталог</a>
-            </article>
-
-            <article class="draftly-template-card theme-restaurant" data-reveal>
-              <div class="draftly-template-card__head">
-                <span class="landing-card__eyebrow">Рестораны</span>
-                <h3>Рестораны</h3>
-              </div>
-              <p>Меню, бронь, визуальный аппетит и атмосфера бренда.</p>
-              <div class="draftly-tag-row">
-                <span>Lite</span>
-                <span>Pro</span>
-                <span>Signature</span>
-              </div>
-              <a class="button button--primary" href="restaurant.html">Открыть каталог</a>
-            </article>
-          </div>
+          <p class="value__text" data-reveal>
+            Мы создаем сайты, которые выглядят как продукт уровня топ-компаний.
+          </p>
         </div>
       </section>
 
-      <section class="landing-section landing-section--draftly" id="pipeline">
+      <section class="section" id="start">
         <div class="container">
-          <div class="section-head section-head--draftly" data-reveal>
-            <span class="eyebrow">Этапы</span>
-            <h2>Короткий путь от выбора демо до сайта под ваш бренд.</h2>
-          </div>
-
-          <div class="draftly-pipeline">
-            <article class="draftly-step" data-reveal>
-              <span class="draftly-step__index">01</span>
-              <h3>Выбираете демо</h3>
-              <p>Открываете 3 готовых уровня по своей нише и выбираете направление.</p>
-            </article>
-
-            <article class="draftly-step" data-reveal>
-              <span class="draftly-step__index">02</span>
-              <h3>Фиксируем структуру</h3>
-              <p>Берем сильный сценарий и подстраиваем его под ваш бизнес и задачу.</p>
-            </article>
-
-            <article class="draftly-step" data-reveal>
-              <span class="draftly-step__index">03</span>
-              <h3>Собираем контент</h3>
-              <p>Тексты, фото, оффер, контакты и нужные акценты под ваш бренд.</p>
-            </article>
-
-            <article class="draftly-step" data-reveal>
-              <span class="draftly-step__index">04</span>
-              <h3>Запускаем</h3>
-              <p>Сайт появляется на вашем домене и работает как полноценная продажная витрина.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="landing-section landing-section--draftly landing-section--cta" id="contact">
-        <div class="container">
-          <div class="draftly-cta" data-reveal>
-            <div class="section-head section-head--draftly">
-              <span class="eyebrow">Старт</span>
-              <h2>Подберем формат под ваш бренд.</h2>
-              <p>Если нужен сайт с сильной cinematic-подачей, начните с демо webcorn.</p>
-            </div>
-            <div class="button-row">
-              <a class="button button--primary" href="#best-previews">Смотреть все демо</a>
-              <a class="button button--ghost" href="account.html">Оставить заявку</a>
-            </div>
+          <div class="cta" data-reveal>
+            <p class="eyebrow">Запуск</p>
+            <h2>Запустить сайт</h2>
+            <a class="button" href="mailto:florencya08090@gmail.com?subject=Заявка%20на%20сайт%20Webcorn">
+              Оставить заявку
+            </a>
           </div>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <div class="site-footer__panel">
-          <div class="site-footer__top">
-            <a class="brand" href="index.html">
-              <span class="brand__mark"><span>W</span></span>
-              <span class="brand__copy">
-                <strong>webcorn</strong>
-                <span>Нишевые сайты с демо</span>
-              </span>
-            </a>
-            <div class="site-footer__links">
-              <a href="hotel.html">Отели</a>
-              <a href="clinic.html">Клиники</a>
-              <a href="restaurant.html">Рестораны</a>
-              <a href="account.html" data-account-link>Войти</a>
-            </div>
-          </div>
-          <div class="site-footer__bottom">
-            <div class="site-footer__contacts">
-              <span>florencya08090@gmail.com</span>
-              <span>+7 776 907 9717</span>
-            </div>
-            <span>© 2026 webcorn</span>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <script src="i18n.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

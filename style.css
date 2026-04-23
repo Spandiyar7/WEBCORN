@@ -45,8 +45,8 @@ body::before {
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(2, 4, 10, 0.08), rgba(2, 4, 10, 0.64)),
-    radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.44) 100%);
+    linear-gradient(180deg, rgba(2, 4, 10, 0.04), rgba(2, 4, 10, 0.46)),
+    radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.28) 100%);
 }
 
 a {

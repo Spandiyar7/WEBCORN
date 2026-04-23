@@ -1139,6 +1139,15 @@ public class Main {
         if (name.endsWith(".json")) {
             return "application/json; charset=UTF-8";
         }
+        if (name.endsWith(".dae")) {
+            return "model/vnd.collada+xml; charset=UTF-8";
+        }
+        if (name.endsWith(".stl")) {
+            return "model/stl";
+        }
+        if (name.endsWith(".mtl") || name.endsWith(".abc")) {
+            return "text/plain; charset=UTF-8";
+        }
         if (name.endsWith(".svg")) {
             return "image/svg+xml";
         }

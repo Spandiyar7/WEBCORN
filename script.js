@@ -176,10 +176,13 @@ const initSpaceScene = async () => {
       metalnessMap: textures.saturnMetallic,
       roughness: 0.86,
       metalness: 0.02,
+      emissive: new THREE.Color(0x1f160b),
+      emissiveIntensity: 0.18,
       color: 0xffffff,
     }),
     rings: new THREE.MeshStandardMaterial({
       map: textures.ringsBase,
+      alphaMap: textures.ringsBase,
       normalMap: textures.ringsNormal,
       roughnessMap: textures.ringsRoughness,
       metalnessMap: textures.ringsMetallic,
@@ -187,6 +190,7 @@ const initSpaceScene = async () => {
       metalness: 0.02,
       transparent: true,
       alphaTest: 0.035,
+      opacity: 0.98,
       side: THREE.DoubleSide,
       color: 0xffffff,
     }),
@@ -254,11 +258,11 @@ const initSpaceScene = async () => {
   group.add(stars);
 
   const glow = new THREE.Mesh(
-    new THREE.SphereGeometry(2.42, 96, 96),
+    new THREE.SphereGeometry(2.12, 96, 96),
     new THREE.ShaderMaterial({
       uniforms: {
         glowColor: { value: new THREE.Color(0x80caff) },
-        intensity: { value: 0.45 },
+        intensity: { value: 0.24 },
       },
       vertexShader: `
         varying vec3 vNormal;
@@ -347,12 +351,22 @@ const initSpaceScene = async () => {
 
   const createFallbackSaturn = () => {
     const fallback = new THREE.Group();
-    const body = new THREE.Mesh(new THREE.SphereGeometry(1.28, 128, 128), materials.saturn);
-    const rings = new THREE.Mesh(new THREE.RingGeometry(1.78, 3.24, 192, 3), materials.rings);
+    const body = new THREE.Mesh(new THREE.SphereGeometry(1.36, 128, 128), materials.saturn);
+    const rings = new THREE.Mesh(new THREE.RingGeometry(1.72, 3.48, 256, 4), materials.rings);
+    const ringLineA = new THREE.Mesh(
+      new THREE.TorusGeometry(2.02, 0.018, 10, 220),
+      new THREE.MeshBasicMaterial({ color: 0xe2c081, transparent: true, opacity: 0.78 })
+    );
+    const ringLineB = new THREE.Mesh(
+      new THREE.TorusGeometry(2.72, 0.014, 10, 220),
+      new THREE.MeshBasicMaterial({ color: 0xb88d58, transparent: true, opacity: 0.62 })
+    );
 
     rings.rotation.x = Math.PI * 0.5;
-    fallback.add(body, rings);
-    fallback.rotation.set(-0.14, -0.34, -0.18);
+    ringLineA.rotation.x = Math.PI * 0.5;
+    ringLineB.rotation.x = Math.PI * 0.5;
+    fallback.add(body, rings, ringLineA, ringLineB);
+    fallback.rotation.set(-0.34, -0.18, -0.34);
 
     return fallback;
   };
@@ -374,19 +388,30 @@ const initSpaceScene = async () => {
       );
     });
 
-  const saturnModel = await loadSaturnModel();
-  saturnGroup.add(saturnModel);
-  saturnGroup.position.set(2.12, -0.12, -5.55);
-  saturnGroup.scale.setScalar(1.06);
+  const fallbackSaturn = createFallbackSaturn();
+  saturnGroup.add(fallbackSaturn);
+  saturnGroup.position.set(1.38, -0.04, -4.72);
+  saturnGroup.scale.setScalar(1.34);
 
-  scene.add(new THREE.AmbientLight(0xcfeaff, 0.5));
-  const keyLight = new THREE.DirectionalLight(0xffffff, 3.2);
+  loadSaturnModel().then((saturnModel) => {
+    saturnModel.scale.multiplyScalar(1.18);
+    saturnModel.position.set(0, 0, 0);
+    saturnModel.traverse((object) => {
+      if (object.isMesh) {
+        object.renderOrder = 2;
+      }
+    });
+    saturnGroup.add(saturnModel);
+  });
+
+  scene.add(new THREE.AmbientLight(0xffead0, 0.72));
+  const keyLight = new THREE.DirectionalLight(0xffffff, 4.4);
   keyLight.position.set(5.8, 3.2, 4.8);
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight(0x84cfff, 0.8);
+  const fillLight = new THREE.DirectionalLight(0x84cfff, 1.18);
   fillLight.position.set(-3.2, 1.8, 3.4);
   scene.add(fillLight);
-  const rimLight = new THREE.DirectionalLight(0x65d8ff, 1.25);
+  const rimLight = new THREE.DirectionalLight(0x65d8ff, 1.75);
   rimLight.position.set(-4, 1.6, -2);
   scene.add(rimLight);
 
@@ -426,19 +451,20 @@ const initSpaceScene = async () => {
     renderedProgress += (motion.progress - renderedProgress) * 0.04;
     const eased = renderedProgress * renderedProgress * (3 - 2 * renderedProgress);
 
-    camera.position.x = 0.18 + eased * 0.38;
+    camera.position.x = 0.04 + eased * 0.28;
     camera.position.y = 0.2 - eased * 0.12;
-    camera.position.z = 8.9 - eased * 0.74;
-    camera.lookAt(0.15 + eased * 0.36, -0.04, -5.4);
+    camera.position.z = 8.35 - eased * 0.52;
+    camera.lookAt(0.72 + eased * 0.18, -0.04, -4.72);
 
     saturnGroup.rotation.y += 0.00105;
     saturnGroup.rotation.x = -0.02 + eased * 0.035;
     saturnGroup.rotation.z = -0.015 - eased * 0.025;
-    saturnGroup.position.x = 2.12 - eased * 0.28;
-    saturnGroup.position.y = -0.12 + eased * 0.08;
+    saturnGroup.position.x = 1.38 - eased * 0.18;
+    saturnGroup.position.y = -0.04 + eased * 0.06;
+    saturnGroup.scale.setScalar(1.34 + eased * 0.08);
     glow.position.x = saturnGroup.position.x;
     glow.position.y = saturnGroup.position.y;
-    glow.material.uniforms.intensity.value = 0.36 + eased * 0.16;
+    glow.material.uniforms.intensity.value = 0.18 + eased * 0.08;
 
     deepStars.rotation.y += 0.00012;
     stars.rotation.y += 0.00025;
